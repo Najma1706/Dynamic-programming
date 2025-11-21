@@ -1,0 +1,92 @@
+Problem Statement
+
+
+
+﻿Emma, a software developer, is working on a plagiarism detection tool for an educational platform. The platform receives large text documents from students, and Emma needs to compare the submitted papers to check for similarities. She decides to implement an algorithm that finds the Longest Common Subsequence (LCS) between two documents, which are represented as strings. To achieve this, Emma needs a program that can efficiently calculate the length of the LCS for these large document strings.
+
+
+
+Can you help Emma by writing a program that calculates the length of the LCS between two given document strings?
+
+Input format :
+The first line of input contains a string representing the first document.
+
+The second line contains a string representing the second document.
+
+Output format :
+The first line of output displays all the unique combinations of the longest common subsequence.
+
+The last line prints "The length of the Longest Common Subsequence is: ", followed by the length(counted based on the number of characters in the subsequence including the spaces between words) of the longest common subsequence.
+
+
+
+Refer to the sample output for formatting specifications.
+
+Code constraints :
+0 ≤ len(str1), len(str2) ≤ 1000
+
+Sample test cases :
+Input 1 :
+This is test
+is test This
+Output 1 :
+is test
+The length of the Longest Common Subsequence is: 7
+Input 2 :
+The brown quick fox
+The quick brown fox
+Output 2 :
+The brown fox
+The quick fox
+The length of the Longest Common Subsequence is: 13
+
+#include <bits/stdc++.h>
+using namespace std;
+vector<string>result;
+set<string>seen;
+
+void find(string s, string t, string cur, int i, int j,vector<vector<int>>&dp){
+    if (i==0 || j==0){
+        reverse(cur.begin(), cur.end());
+        if (!seen.count(cur)){
+            result.push_back(cur);
+            seen.insert(cur);
+        }
+        return;
+    }
+    
+    if (s[i-1]==t[j-1]){
+        cur.push_back(s[i-1]);
+        find(s,t,cur,i-1,j-1,dp);
+    }
+    else {
+        if (dp[i-1][j]==dp[i][j-1]){
+        find(s,t,cur,i-1,j,dp);
+        find(s,t,cur,i,j-1,dp);
+    }
+    else if (dp[i-1][j]>dp[i][j-1]){
+        find(s,t,cur,i-1,j,dp);
+    }
+    else{
+        find(s,t,cur,i,j-1,dp);
+    }
+    }
+}
+
+int main(){
+    string s, t;
+    getline(cin,s);
+    getline(cin,t);
+    int n=s.length(), m=t.length();
+    vector<vector<int>>dp(n+1,vector<int>(m+1,0));
+    for (int i=1; i<=n; i++){
+        for (int j=1; j<=m; j++){
+            if (s[i-1]==t[j-1]) dp[i][j]=1+dp[i-1][j-1];
+            else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        }
+    }
+    int len=dp[n][m];
+    find(s,t,"",n,m,dp);
+    for (string i:result) cout<<i<<endl;
+    cout<<"The length of the Longest Common Subsequence is: "<<len;
+}
