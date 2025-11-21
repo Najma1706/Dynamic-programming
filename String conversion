@@ -1,0 +1,66 @@
+Problem Statement
+Olivia is comparing two historical manuscripts, manuscript1 and manuscript2, and wants to determine the minimum cost required to transform manuscript1 into manuscript2 by performing a series of operations. These operations can be insertion, deletion, or substitution of characters, each with a specific cost. The cost of each operation is given as input. Write a program to calculate the minimum cost of transforming one manuscript into another.
+
+Input format :
+The first line of input contains the string m1, representing manuscript 1.
+
+The second line of input contains the string m2, representing manuscript 2.
+
+The third line of input contains three integers representing the costs of the operations: insertion, deletion, and substitution.
+
+Output format :
+The output prints the integer representing the minimum cost required to transform manuscript1 into manuscript2.
+
+
+
+Refer to the sample output for formatting specifications.
+
+Code constraints :
+The given test cases fall under the following constraints:
+
+1 ≤ string length of m1, m2 ≤ 100
+
+Sample test cases :
+Input 1 :
+book
+back
+4
+3
+5
+Output 1 :
+10
+Input 2 :
+history
+mystery
+2
+3
+4
+Output 2 :
+12
+
+// You are using GCC
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    string s1,s2;
+    int ins,del,rep;
+    cin>>s1>>s2>>ins>>del>>rep;
+    int n1=s1.size();
+    int n2=s2.size();
+    int dp[n1+1][n2+1];
+    for(int i=0; i<=n1; i++) {
+        dp[i][0]=i*del;
+    }`
+    for(int i=0; i<=n2; i++) {
+        dp[0][i]=i*ins;
+    }
+    for(int i=1; i<=n1; i++) {
+        for(int j=1; j<=n2; j++) {
+            if(s1[i-1]==s2[j-1]) dp[i][j]=dp[i-1][j-1];
+            else {
+                dp[i][j]=min(dp[i][j-1]+ins,min(dp[i-1][j]+del,dp[i-1][j-1]+rep));
+            }
+        }
+    }
+    cout<<dp[n1][n2];
+}
