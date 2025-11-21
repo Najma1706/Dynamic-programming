@@ -1,0 +1,55 @@
+In biological data analysis or text correction systems, finding the most stable or symmetrical parts of a sequence is very useful. A palindromic subsequence is a sequence that reads the same forwards and backwards, but not necessarily contiguous. Your task is to help analyze the stability of a given sequence by identifying its longest palindromic subsequence.
+
+Your Task:
+
+Write a C++ program that reads a string and prints the length of its longest palindromic subsequence.
+
+Input format :
+A single line containing a string S
+
+Output format :
+A single integer — the length of the longest palindromic subsequence.
+
+Code constraints :
+1 ≤ |S| ≤ 1000
+
+S contains only uppercase English letters
+
+
+
+Sample test cases :
+Input 1 :
+AGGTAB
+Output 1 :
+4
+Input 2 :
+A
+Output 2 :
+1
+
+// You are using GCC
+// You are using GCC
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    string s1,s2;
+    cin>>s1;
+    s2=s1;
+    reverse(s2.begin(),s2.end());
+    int n=s1.size();
+    int dp[n+1][n+1];
+    for(int i=0; i<=n; i++){
+        for(int j=0; j<=n; j++) {
+            dp[i][j]=0;
+        }
+    }
+    for(int i=1; i<=n; i++) {
+        for(int j=1; j<=n; j++) {
+            if(s1[i-1]==s2[j-1]){
+                dp[i][j]=dp[i-1][j-1]+1;
+            }
+            else dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+        }
+    }
+    cout<<dp[n][n];
+}
